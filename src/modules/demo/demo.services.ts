@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class DemoService {
   constructor(private config: ConfigService) {}
-  getDemo(): string {
+  getEnv(): string {
     // return process.env.PORT;
     // return this.config.get('DOMAIN');
     // return this.config.get('app.port');

@@ -1,12 +1,27 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { DemoService } from './demo.services';
+import { classValidatorBodyDto, classValidatorQueryDto } from './dtos/index.dto';
 
 @Controller('demo')
 export class DemoController {
-  constructor(private demoService: DemoService) {}
-  @Get('get')
-  getDemo(@Query() query): string {
+  constructor(
+    private demoService: DemoService
+  ) {}
+
+  @Get('env/get')
+  getEnv(@Query() query): string {
     console.log('query', query);
-    return this.demoService.getDemo();
+    return this.demoService.getEnv();
+  }
+
+  @Post('class-validator/:id')
+  PostClassValidator(
+    @Param('id') id: string,
+    @Query() query: classValidatorQueryDto,
+    @Body() payload: classValidatorBodyDto,
+  ): void {
+    console.log('PostClassValidator', {
+      id, query, payload
+    });
   }
 }
