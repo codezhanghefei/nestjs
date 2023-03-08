@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +15,10 @@ async function bootstrap() {
     },
   }));
 
-  const port = process.env.PORT;
+  const config = app.get(ConfigService);
+  const port = config.get('app.port')
+  // 使用 process.env 方式引入port
+  // const port = process.env.PORT;
   await app.listen(port);
   Logger.log(`app is listening on port = ${port} and env is ${process.env.NODE_ENV || 'dev'}`,
   );

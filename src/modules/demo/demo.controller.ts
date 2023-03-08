@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Query } from '@nestjs/common';
 import { DemoService } from './demo.services';
 import { classValidatorBodyDto, classValidatorQueryDto } from './dtos/index.dto';
 
@@ -20,7 +20,7 @@ export class DemoController {
     @Query() query: classValidatorQueryDto,
     @Body() payload: classValidatorBodyDto,
   ): void {
-    console.log('PostClassValidator', {
+    Logger.log('PostClassValidator', {
       id, query, payload
     });
   }
