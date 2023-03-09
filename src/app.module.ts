@@ -1,11 +1,27 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@/share/modules';
+import { ConfigModule, LoggerModule } from '@/share/modules';
 import { DemoModule } from '@/modules';
+import { AllExceptionsFilter } from './filters';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { AccessInterceptor } from './interceptors';
 @Module({
-  imports: [ConfigModule, DemoModule],
+  imports: [
+    LoggerModule,
+    ConfigModule,
+    DemoModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AccessInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },],
 })
 export class AppModule {}

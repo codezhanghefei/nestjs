@@ -1,10 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Logger as CustomLogger } from './share/modules/logger/logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+
+  // 使用管道校验参数
   app.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true,
     skipMissingProperties: false,
@@ -22,5 +27,8 @@ async function bootstrap() {
   await app.listen(port);
   Logger.log(`app is listening on port = ${port} and env is ${process.env.NODE_ENV || 'dev'}`,
   );
+
+  const logger = app.get(CustomLogger);
+  app.useLogger(logger);
 }
 bootstrap();
